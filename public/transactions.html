@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Details</title>
+    <link rel="stylesheet" href="./styles.css">
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NJT9GRQB');</script>
+    <!-- End Google Tag Manager -->
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJT9GRQB"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div class="container">
+        <h1>Transaction Details</h1>
+        <div id="transaction-details"></div>
+        <button onclick="window.location.href='index.html'">Back to Store</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const transactionId = params.get("transactionId");
+            const productId = params.get("productId");
+            const productName = params.get("productName");
+
+            if (transactionId && productId && productName) {
+                document.getElementById("transaction-details").innerHTML = `
+                    <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                    <p><strong>Product ID:</strong> ${productId}</p>
+                    <p><strong>Product Name:</strong> ${productName}</p>
+                `;
+            } else {
+                document.getElementById("transaction-details").innerHTML = "<p>No transaction found.</p>";
+            }
+        });
+    </script>
+</body>
+</html>
