@@ -3,26 +3,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const productId = urlParams.get("id");
 
     if (!productId) {
-        document.getElementById("product-details").innerHTML = "<p>❌ Product not found!</p>";
-        console.error("❌ No product ID found in URL.");
+        document.getElementById("product-details").innerHTML = "<p>Product not found!</p>";
         return;
     }
 
-    fetch(`https://ecommerce-backend-h0w3.onrender.com/product/${productId}`)
+    fetch(`https://ecommerce-backend-h0w3.onrender.com/products/${productId}`)
         .then(response => {
-            if (!response.ok) {
-                throw new Error("❌ Network response was not ok.");
-            }
+            if (!response.ok) throw new Error("Product not found!");
             return response.json();
         })
         .then(product => {
             if (!product) {
-                document.getElementById("product-details").innerHTML = "<p>❌ Product not found!</p>";
-                console.warn("⚠️ Product data is empty.");
+                document.getElementById("product-details").innerHTML = "<p>Product not found!</p>";
                 return;
             }
 
-            // ✅ Correct image paths
+            // ✅ Set correct image paths based on product names
             const productImages = {
                 "laptop": "images/laptop.jpg",
                 "headphones": "images/headphones.png",
@@ -38,16 +34,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let imagePath = productImages[product.name.toLowerCase()] || "images/default.jpg";
 
-            // ✅ Render product details
             document.getElementById("product-details").innerHTML = `
                 <img src="${imagePath}" alt="${product.name}" width="300">
                 <h2>${product.name}</h2>
                 <p>${product.description}</p>
                 <p><strong>$${product.price}</strong></p>
-                <button onclick="addToCart('${product.id}', '${product.name}')">Add to Cart</button>
+                <button onclick="addToCart('${product.id}', '${product.name}', '${product.price}')">Add to Cart</button>
             `;
 
-            // ✅ Set Tealium `utag_data`
+            // ✅ Set Tealium DataLayer for Product View
             window.utag_data = {
                 tealium_event: "product_view",
                 product_id: product.id,
@@ -55,57 +50,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 product_price: product.price
             };
 
-            console.log("✅ Tealium utag_data:", window.utag_data);
+            console.log("✅ Product View Event Data:", window.utag_data);
 
-            // ✅ Fire Tealium event if utag.js is available
-            if (typeof utag !== "undefined" && typeof utag.view === "function") {
-                utag.view(window.utag_data);
-                console.log("✅ Tealium event fired:", window.utag_data);
+            // ✅ Fire Product View event if utag is available
+            if (typeof utag !== "undefined" && typeof utag.link === "function") {
+                utag.link(window.utag_data);
+                console.log("✅ Product View Event sent to Tealium");
             } else {
-                console.warn("⚠️ Tealium utag.view is not available.");
+                console.warn("⚠️ Tealium utag.link is not available.");
             }
-
-            // ✅ Push to Google Tag Manager
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                event: "product_view",
-                ecommerce: {
-                    detail: {
-                        products: [{
-                            id: product.id,
-                            name: product.name,
-                            price: product.price
-                        }]
-                    }
-                }
-            });
-
-            console.log("✅ Data pushed to GTM:", window.dataLayer);
         })
         .catch(error => {
             console.error("❌ Error fetching product details:", error);
-            document.getElementById("product-details").innerHTML = "<p>⚠️ Error loading product details.</p>";
+            document.getElementById("product-details").innerHTML = "<p>Product not found!</p>";
         });
 });
 
-// ✅ Add product to cart (temporary alert, can be expanded)
-function addToCart(productId, productName) {
+// ✅ Add product to cart and fire Tealium Purchase Event
+function addToCart(productId, productName, productPrice) {
     alert(`${productName} added to cart!`);
-    console.log(`🛒 ${productName} added to cart.`);
 
-    // ✅ Push cart event to Google Tag Manager
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-        event: "add_to_cart",
-        ecommerce: {
-            add: {
-                products: [{
-                    id: productId,
-                    name: productName
-                }]
-            }
-        }
-    });
+    // ✅ Fire Tealium Purchase Event
+    const purchaseData = {
+        tealium_event: "purchase",
+        order_id: "ORDER" + Math.floor(Math.random() * 1000000), // Mock order ID
+        product_id: productId,
+        product_name: productName,
+        product_price: productPrice
+    };
 
-    console.log("✅ Cart event sent to GTM:", window.dataLayer);
+    console.log("✅ Purchase Event Data:", purchaseData);
+
+    if (typeof utag !== "undefined" && typeof utag.link === "function") {
+        utag.link(purchaseData);
+        console.log("✅ Purchase Event sent to Tealium");
+    } else {
+        console.warn("⚠️ Tealium utag.link is not available.");
+    }
 }
