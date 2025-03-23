@@ -2,12 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const productList = document.getElementById("product-list");
 
     fetch("https://ecommerce-backend-h0w3.onrender.com/products")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Failed to fetch products");
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(products => {
             products.forEach(product => {
                 const productDiv = document.createElement("div");
@@ -45,9 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ✅ Track Product View (Triggers on Image Click)
 function trackProductView(productId, productName, productPrice) {
-    if (!productId || !productName || !productPrice) return;
-
-    // Push to GA4 DataLayer
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
         event: "product_view",
@@ -56,19 +48,19 @@ function trackProductView(productId, productName, productPrice) {
         }
     });
 
-    console.log("GA4 Product View Event:", { productId, productName, productPrice });
+    console.log("Product View event pushed to GTM:", { productId, productName, productPrice });
 
-    // Push to Tealium
+    // ✅ Tealium Event
     var utag_data = {
         tealium_event: "product_view",
-        product_id: [productId], // Array format
-        product_name: [productName],
-        product_price: [productPrice]
+        product_id: productId,
+        product_name: productName,
+        product_price: productPrice
     };
 
     if (typeof utag !== "undefined" && typeof utag.link === "function") {
         utag.link(utag_data);
-        console.log("Tealium Product View Event Sent:", utag_data);
+        console.log("Product View event sent to Tealium:", utag_data);
     } else {
         console.warn("Tealium utag.link is not available.");
     }
@@ -76,9 +68,6 @@ function trackProductView(productId, productName, productPrice) {
 
 // ✅ Navigate to product details page & Push DataLayer + Tealium Event
 function viewDetails(productId, productName, productPrice) {
-    if (!productId || !productName || !productPrice) return;
-
-    // Push to GA4 DataLayer
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
         event: "view_item",
@@ -87,19 +76,19 @@ function viewDetails(productId, productName, productPrice) {
         }
     });
 
-    console.log("GA4 View Details Event:", { productId, productName, productPrice });
+    console.log("View Details event pushed to GTM:", { productId, productName, productPrice });
 
-    // Push to Tealium
+    // ✅ Tealium Event
     var utag_data = {
         tealium_event: "view_item",
-        product_id: [productId],
-        product_name: [productName],
-        product_price: [productPrice]
+        product_id: productId,
+        product_name: productName,
+        product_price: productPrice
     };
 
     if (typeof utag !== "undefined" && typeof utag.link === "function") {
         utag.link(utag_data);
-        console.log("Tealium View Item Event Sent:", utag_data);
+        console.log("View Item event sent to Tealium:", utag_data);
     } else {
         console.warn("Tealium utag.link is not available.");
     }
@@ -109,23 +98,15 @@ function viewDetails(productId, productName, productPrice) {
 
 // ✅ Handle Buy Now action & Push DataLayer + Tealium Event
 function buyNow(productId, productName, productPrice) {
-    if (!productId || !productName || !productPrice) return;
-
-    const transactionId = crypto.randomUUID(); // ✅ Use secure UUID instead of `Math.random()`
+    const transactionId = crypto.randomUUID(); // Use secure UUID instead of Math.random()
 
     fetch("https://ecommerce-backend-h0w3.onrender.com/purchase", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ transactionId, productId, productName })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Purchase request failed");
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        // Push to GA4 DataLayer
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
             event: "purchase",
@@ -135,20 +116,20 @@ function buyNow(productId, productName, productPrice) {
             }
         });
 
-        console.log("GA4 Purchase Event:", { transactionId: data.transactionId, productId, productName, productPrice });
+        console.log("Purchase event pushed to GTM:", { transactionId: data.transactionId, productId, productName, productPrice });
 
-        // Push to Tealium
+        // ✅ Tealium Event
         var utag_data = {
             tealium_event: "purchase",
             transaction_id: data.transactionId,
-            product_id: [productId],
-            product_name: [productName],
-            product_price: [productPrice]
+            product_id: productId,
+            product_name: productName,
+            product_price: productPrice
         };
 
         if (typeof utag !== "undefined" && typeof utag.link === "function") {
             utag.link(utag_data);
-            console.log("Tealium Purchase Event Sent:", utag_data);
+            console.log("Purchase event sent to Tealium:", utag_data);
         } else {
             console.warn("Tealium utag.link is not available.");
         }

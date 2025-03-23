@@ -4,44 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eCommerce Store</title>
+
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NJT9GRQB');</script>
+    <script>
+        (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),
+                dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-NJT9GRQB');
+    </script>
     <!-- End Google Tag Manager -->
-    <!-- <script type="text/javascript">
-        (function(a,b,c,d){
-          a='https://tags.tiqcdn.com/utag/nabler-sandbox/rohan.c/prod/utag.js';
-          b=document;c='script';d=b.createElement(c);
-          d.src=a;d.type='text/java'+c;d.async=true;
-          a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
-        })();
-      </script> -->
-      
-</head>
-<body style="font-family: Arial, sans-serif; background-color: #85FFBD; background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%); text-align: center; margin: 0; padding: 0;">
+
+    <!-- Tealium Script -->
     <script type="text/javascript">
         (function(a,b,c,d){
-          a='https://tags.tiqcdn.com/utag/nabler-sandbox/rohan.c/prod/utag.js';
-          b=document;c='script';d=b.createElement(c);
-          d.src=a;d.type='text/java'+c;d.async=true;
-          a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
+            a='https://tags.tiqcdn.com/utag/nabler-sandbox/rohan.c/prod/utag.js';
+            b=document;c='script';d=b.createElement(c);
+            d.src=a;d.type='text/java'+c;d.async=true;
+            a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
         })();
-      </script>
-    <!-- Google Tag Manager (noscript) -->
-    <div id="root"></div>
+    </script>
+    <!-- End Tealium Script -->
 
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJT9GRQB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #85FFBD;
+            background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        .view-transactions {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .view-transactions:hover {
+            background-color: #0056b3;
+        }
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJT9GRQB" 
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <header style="background-color: #333; color: white; padding: 15px; font-size: 24px;">
+
+    <header>
         <h1>Welcome to Store</h1>
     </header>
-    <div class="container" style="width: 80%; margin: 20px auto;">
-        <button class="view-transactions" onclick="window.location.href='transactions.html'" style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; transition: background 0.3s; margin-top: 10px;">View Transactions</button>
-        <div id="product-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;"></div>
+
+    <div class="container">
+        <button class="view-transactions" onclick="window.location.href='transactions.html'">View Transactions</button>
+        <div id="product-list"></div>
     </div>
+
+    <!-- ✅ GTM Pageview Tracking -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            event: "page_view",
+            page_title: document.title,
+            page_path: window.location.pathname
+        });
+        console.log("✅ GTM Page View Event Sent");
+    </script>
 
     <script src="script.js"></script>
 </body>
