@@ -15,19 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
             <h2>Transaction ID: ${transaction.transactionId}</h2>
             <p>Product Name: ${transaction.productName}</p>
             <p>Product ID: ${transaction.productId}</p>
-            <p>Price: $${transaction.productPrice}</p>
-            <p>List Price: $${transaction.productListPrice}</p>
         `;
         transactionList.appendChild(transactionDiv);
 
-        // ✅ Tealium Purchase Event (with price details)
+        // ✅ Tealium Purchase Event
         window.utag_data = {
             tealium_event: "purchase",
             transaction_id: transaction.transactionId,
             product_id: transaction.productId,
-            product_name: transaction.productName,
-            product_price: transaction.productPrice,  // Final price
-            product_list_price: transaction.productListPrice // Original list price
+            product_name: transaction.productName
         };
 
         if (typeof utag !== "undefined" && typeof utag.link === "function") {
