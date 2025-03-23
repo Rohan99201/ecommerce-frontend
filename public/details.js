@@ -34,17 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let imagePath = productImages[product.name.toLowerCase()] || "images/default.jpg";
 
-            // ✅ Ensure price values exist
-            const productPrice = product.price || 0;
-            const productListPrice = product.list_price || productPrice; // Fallback if list_price is missing
-
             document.getElementById("product-details").innerHTML = `
                 <img src="${imagePath}" alt="${product.name}" width="300">
                 <h2>${product.name}</h2>
                 <p>${product.description}</p>
-                <p><strong>Price: $${productPrice}</strong></p>
-                <p><strong>List Price: $${productListPrice}</strong></p>
-                <button onclick="addToCart('${product.id}', '${product.name}', '${productPrice}', '${productListPrice}')">Add to Cart</button>
+                <p><strong>$${product.price}</strong></p>
+                <button onclick="addToCart('${product.id}', '${product.name}', '${product.price}')">Add to Cart</button>
             `;
 
             // ✅ Set Tealium DataLayer for Product View
@@ -52,8 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tealium_event: "product_view",
                 product_id: product.id,
                 product_name: product.name,
-                product_price: productPrice,
-                product_list_price: productListPrice
+                product_price: product.price
             };
 
             console.log("✅ Product View Event Data:", window.utag_data);
@@ -73,32 +67,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ✅ Add product to cart and fire Tealium Purchase Event
-function addToCart(productId, productName, productPrice, productListPrice) {
+function addToCart(productId, productName, productPrice) {
     alert(`${productName} added to cart!`);
-
-    // ✅ Create transaction ID
-    const transactionId = "T" + Date.now();
-
-    // ✅ Store transaction in localStorage
-    const transaction = {
-        transactionId: transactionId,
-        productId: productId,
-        productName: productName,
-        productPrice: productPrice,
-        productListPrice: productListPrice
-    };
-    localStorage.setItem(transactionId, JSON.stringify(transaction));
-
-    console.log("✅ Stored Transaction:", transaction);
 
     // ✅ Fire Tealium Purchase Event
     const purchaseData = {
         tealium_event: "purchase",
-        transaction_id: transactionId,
+        transaction_id: data.transactionId,
         product_id: productId,
         product_name: productName,
-        product_price: productPrice,
-        product_list_price: productListPrice
+        product_price: productPrice
     };
 
     console.log("✅ Purchase Event Data:", purchaseData);
