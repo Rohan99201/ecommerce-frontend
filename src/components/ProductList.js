@@ -5,7 +5,7 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch("https://ecommerce-backend-h0w3.onrender.com/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -16,7 +16,7 @@ const ProductList = () => {
 
   const handlePurchase = async (product) => {
     const transactionId = Math.random().toString(36).substring(7);
-    await fetch("http://localhost:5000/purchase", {
+    await fetch("https://ecommerce-backend-h0w3.onrender.com/purchase", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ transactionId, productId: product.id, productName: product.name }),

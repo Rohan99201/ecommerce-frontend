@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    fetch(`http://localhost:5000/product/${productId}`)
+    fetch(`https://ecommerce-backend-h0w3.onrender.com/product/${productId}`)
         .then(response => response.json())
         .then(product => {
             if (!product) {
