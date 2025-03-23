@@ -5,45 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction Details</title>
     <link rel="stylesheet" href="./styles.css">
+
     <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NJT9GRQB');</script>
     <!-- End Google Tag Manager -->
-    <!-- <script type="text/javascript">
+
+    <script type="text/javascript">
         (function(a,b,c,d){
           a='https://tags.tiqcdn.com/utag/nabler-sandbox/rohan.c/prod/utag.js';
           b=document;c='script';d=b.createElement(c);
           d.src=a;d.type='text/java'+c;d.async=true;
           a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
         })();
-      </script> -->
-      
+    </script>
+
 </head>
 <body>
-    <script type="text/javascript">
-        var utag_data = {
-            tealium_event: "purchase",
-            transaction_id: data.transactionId,
-            product_id: [productId],
-            product_name: [productName],
-            product_price: [productPrice]
-    };
-    </script>
-    <script type="text/javascript">
-        (function(a,b,c,d){
-          a='https://tags.tiqcdn.com/utag/nabler-sandbox/rohan.c/prod/utag.js';
-          b=document;c='script';d=b.createElement(c);
-          d.src=a;d.type='text/java'+c;d.async=true;
-          a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
-        })();
-      </script>
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJT9GRQB"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJT9GRQB"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+
     <div class="container">
         <h1>Transaction Details</h1>
         <div id="transaction-details"></div>
@@ -56,13 +42,34 @@
             const transactionId = params.get("transactionId");
             const productId = params.get("productId");
             const productName = params.get("productName");
+            const productPrice = params.get("productPrice");
+            const productListPrice = params.get("productListPrice");
 
             if (transactionId && productId && productName) {
                 document.getElementById("transaction-details").innerHTML = `
                     <p><strong>Transaction ID:</strong> ${transactionId}</p>
                     <p><strong>Product ID:</strong> ${productId}</p>
                     <p><strong>Product Name:</strong> ${productName}</p>
+                    <p><strong>Price:</strong> $${productPrice}</p>
+                    <p><strong>List Price:</strong> $${productListPrice}</p>
                 `;
+
+                // ✅ Tealium Purchase Event - Corrected
+                window.utag_data = {
+                    tealium_event: "purchase",
+                    transaction_id: transactionId,
+                    product_id: productId,
+                    product_name: productName,
+                    product_price: productPrice,
+                    product_list_price: productListPrice
+                };
+
+                if (typeof utag !== "undefined" && typeof utag.link === "function") {
+                    utag.link(window.utag_data);
+                    console.log("Tealium purchase event sent:", window.utag_data);
+                } else {
+                    console.warn("Tealium utag.link is not available.");
+                }
             } else {
                 document.getElementById("transaction-details").innerHTML = "<p>No transaction found.</p>";
             }

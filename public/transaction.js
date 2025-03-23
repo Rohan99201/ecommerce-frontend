@@ -15,22 +15,26 @@ document.addEventListener("DOMContentLoaded", () => {
             <h2>Transaction ID: ${transaction.transactionId}</h2>
             <p>Product Name: ${transaction.productName}</p>
             <p>Product ID: ${transaction.productId}</p>
+            <p>Price: $${transaction.productPrice}</p>
+            <p>List Price: $${transaction.productListPrice}</p>
         `;
         transactionList.appendChild(transactionDiv);
 
-        // ✅ Tealium Purchase Event
+        // ✅ Tealium Purchase Event with product_price & product_list_price
         window.utag_data = {
             tealium_event: "purchase",
             transaction_id: transaction.transactionId,
             product_id: transaction.productId,
-            product_name: transaction.productName
+            product_name: transaction.productName,
+            product_price: transaction.productPrice,
+            product_list_price: transaction.productListPrice
         };
 
         if (typeof utag !== "undefined" && typeof utag.link === "function") {
             utag.link(window.utag_data);
-            console.log("Purchase event sent to Tealium:", window.utag_data);
+            console.log("✅ Tealium purchase event sent:", window.utag_data);
         } else {
-            console.warn("Tealium utag.link is not available.");
+            console.warn("⚠️ Tealium utag.link is not available.");
         }
     });
 });
