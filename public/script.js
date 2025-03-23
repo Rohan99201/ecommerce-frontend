@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let imagePath = productImages[product.name.toLowerCase()] || "images/default.jpg";
 
                 productDiv.innerHTML = `
-                    <img src="${imagePath}" alt="${product.name}" width="200">
+                    <img src="${imagePath}" alt="${product.name}" width="200" onclick="trackProductView('${product.id}', '${product.name}', '${product.price}')">
                     <h2>${product.name}</h2>
                     <p>${product.description}</p>
                     <p><strong>$${product.price}</strong></p>
@@ -37,6 +37,38 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => console.error("Error fetching products:", error));
 });
+
+// ✅ Track Product View (Triggers on Image Click)
+function trackProductView(productId, productName, productPrice) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        event: "product_view",
+        ecommerce: {
+            items: [{
+                id: productId,
+                name: productName,
+                price: productPrice
+            }]
+        }
+    });
+
+    console.log("Product View event pushed to GTM:", { productId, productName, productPrice });
+
+    // ✅ Tealium Event
+    window.utag_data = {
+        tealium_event: "product_view",
+        product_id: productId,
+        product_name: productName,
+        product_price: productPrice
+    };
+
+    if (typeof utag !== "undefined" && typeof utag.link === "function") {
+        utag.link(window.utag_data);
+        console.log("Product View event sent to Tealium:", window.utag_data);
+    } else {
+        console.warn("Tealium utag.link is not available.");
+    }
+}
 
 // ✅ Navigate to product details page & Push DataLayer + Tealium Event
 function viewDetails(productId, productName, productPrice) {
@@ -56,7 +88,7 @@ function viewDetails(productId, productName, productPrice) {
 
     // ✅ Tealium Event
     window.utag_data = {
-        event_name: "view_item",
+        tealium_event: "view_item",
         product_id: productId,
         product_name: productName,
         product_price: productPrice
@@ -100,7 +132,7 @@ function buyNow(productId, productName, productPrice) {
 
         // ✅ Tealium Event
         window.utag_data = {
-            event_name: "purchase",
+            tealium_event: "purchase",
             transaction_id: data.transactionId,
             product_id: productId,
             product_name: productName,
