@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    fetch(`https://ecommerce-backend-h0w3.onrender.com/products/${productId}`)
+    fetch(`https://ecommerce-backend-h0w3.onrender.com/product/${productId}`)
         .then(response => {
             if (!response.ok) throw new Error("Product not found!");
             return response.json();
