@@ -88,7 +88,7 @@ function viewDetails(productId, productName, productPrice) {
 
     // ✅ Tealium Event
     window.utag_data = {
-        tealium_event: "view_item",
+        tealium_event: "product_view",
         product_id: productId,
         product_name: productName,
         product_price: productPrice
