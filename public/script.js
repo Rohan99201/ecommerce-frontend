@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => console.error("Error fetching products:", error));
 });
 
-// ✅ Navigate to product details page & Push DataLayer Event
+// ✅ Navigate to product details page & Push DataLayer + Tealium Event
 function viewDetails(productId, productName, productPrice) {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
@@ -52,12 +52,27 @@ function viewDetails(productId, productName, productPrice) {
         }
     });
 
-    console.log("View Details event pushed:", { productId, productName, productPrice });
+    console.log("View Details event pushed to GTM:", { productId, productName, productPrice });
+
+    // ✅ Tealium Event
+    window.utag_data = {
+        event_name: "view_item",
+        product_id: productId,
+        product_name: productName,
+        product_price: productPrice
+    };
+
+    if (typeof utag !== "undefined" && typeof utag.link === "function") {
+        utag.link(window.utag_data);
+        console.log("View Item event sent to Tealium:", window.utag_data);
+    } else {
+        console.warn("Tealium utag.link is not available.");
+    }
 
     window.location.href = `details.html?id=${productId}`;
 }
 
-// ✅ Handle Buy Now action & Push DataLayer Event
+// ✅ Handle Buy Now action & Push DataLayer + Tealium Event
 function buyNow(productId, productName, productPrice) {
     const transactionId = Math.random().toString(36).substr(2, 9); // Generate fake transaction ID
 
@@ -81,7 +96,23 @@ function buyNow(productId, productName, productPrice) {
             }
         });
 
-        console.log("Purchase event pushed:", { transactionId: data.transactionId, productId, productName, productPrice });
+        console.log("Purchase event pushed to GTM:", { transactionId: data.transactionId, productId, productName, productPrice });
+
+        // ✅ Tealium Event
+        window.utag_data = {
+            event_name: "purchase",
+            transaction_id: data.transactionId,
+            product_id: productId,
+            product_name: productName,
+            product_price: productPrice
+        };
+
+        if (typeof utag !== "undefined" && typeof utag.link === "function") {
+            utag.link(window.utag_data);
+            console.log("Purchase event sent to Tealium:", window.utag_data);
+        } else {
+            console.warn("Tealium utag.link is not available.");
+        }
 
         window.location.href = `transactions.html?transactionId=${data.transactionId}&productId=${productId}&productName=${encodeURIComponent(productName)}`;
     })
