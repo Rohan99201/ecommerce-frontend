@@ -73,7 +73,7 @@ function addToCart(productId, productName, productPrice) {
     // ✅ Fire Tealium Purchase Event
     const purchaseData = {
         tealium_event: "purchase",
-        order_id: "ORDER" + Math.floor(Math.random() * 1000000), // Mock order ID
+        transaction_id: data.transactionId,
         product_id: productId,
         product_name: productName,
         product_price: productPrice
