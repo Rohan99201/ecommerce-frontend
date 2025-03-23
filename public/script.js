@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function viewDetails(productId, productName, productPrice) {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-        event: "view_details",
+        event: "view_item",
         ecommerce: {
             items: [{
                 id: productId,
