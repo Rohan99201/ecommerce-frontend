@@ -45,13 +45,13 @@
             const productPrice = params.get("productPrice");
             const productListPrice = params.get("productListPrice");
 
-            if (transactionId && productId && productName && productPrice) {
+            if (transactionId && productId && productName) {
                 document.getElementById("transaction-details").innerHTML = `
                     <p><strong>Transaction ID:</strong> ${transactionId}</p>
                     <p><strong>Product ID:</strong> ${productId}</p>
                     <p><strong>Product Name:</strong> ${productName}</p>
-                    <p><strong>Price:</strong> $${productPrice}</p>
-                    <p><strong>List Price:</strong> $${productListPrice}</p>
+                    <p><strong>Price:</strong> ${productPrice}</p>
+                    <p><strong>List Price:</strong> ${productListPrice}</p>
                 `;
 
                 // ✅ Tealium Purchase Event - Corrected
