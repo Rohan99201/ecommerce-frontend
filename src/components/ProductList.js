@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { trackViewItem, trackPurchase } from "../utils/tealium"; // ✅ Import Tealium functions
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -6,7 +7,10 @@ const ProductList = () => {
   useEffect(() => {
     fetch("http://localhost:5000/products")
       .then((response) => response.json())
-      .then((data) => setProducts(data))
+      .then((data) => {
+        setProducts(data);
+        data.forEach(product => trackViewItem(product)); // ✅ Track view event for each product
+      })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
@@ -17,6 +21,8 @@ const ProductList = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ transactionId, productId: product.id, productName: product.name }),
     });
+
+    trackPurchase(transactionId, product); // ✅ Track purchase event
     alert(`Purchase successful! Transaction ID: ${transactionId}`);
   };
 
