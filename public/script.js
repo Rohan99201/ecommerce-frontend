@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h2>${product.name}</h2>
                     <p>${product.description}</p>
                     <p><strong>$${product.price}</strong></p>
-                    <button onclick="viewDetails('${product.id}', '${product.name}', '${product.price}')">View Details</button>
+                    <button class="view-details" onclick="viewDetails('${product.id}', '${product.name}', '${product.price}')">View Details</button>
                     <button class="buy-now" onclick="buyNow('${product.id}', '${product.name}', '${product.price}')">Buy Now</button>
                 `;
                 productList.appendChild(productDiv);
