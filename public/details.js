@@ -87,19 +87,19 @@ function addToCart(productId, productName, productPrice, productListPrice) {
     localStorage.setItem(transactionKey, JSON.stringify(transaction));
     console.log("✅ Stored Transaction:", transaction);
 
-    const purchaseData = {
-        tealium_event: "purchase",
-        transaction_id: transactionId,
-        product_id: productId,
-        product_name: productName,
-        product_price: productPrice,
-        product_list_price: productListPrice
-    };
+    // const purchaseData = {
+    //     tealium_event: "add_to_cart",
+    //     // transaction_id: transactionId,
+    //     product_id: productId,
+    //     product_name: productName,
+    //     product_price: productPrice,
+    //     product_list_price: productListPrice
+    // };
 
-    if (typeof utag !== "undefined" && typeof utag.link === "function") {
-        utag.link(purchaseData);
-        console.log("✅ Purchase Event sent to Tealium");
-    } else {
-        console.warn("⚠️ Tealium utag.link is not available.");
-    }
+    // if (typeof utag !== "undefined" && typeof utag.link === "function") {
+    //     utag.link(purchaseData);
+    //     console.log("✅ Purchase Event sent to Tealium");
+    // } else {
+    //     console.warn("⚠️ Tealium utag.link is not available.");
+    // }
 }
